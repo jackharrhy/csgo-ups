@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "csgo": "^1.5.14",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "steam": "^1.4.1",
     "steam-totp": "^2.1.1"
