@@ -7,5 +7,10 @@
     "start": "node src/index.js"
   },
   "author": "Jack Arthur Harrhy",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "csgo": "^1.5.14",
+    "dotenv": "^8.2.0",
+    "steam": "^1.4.1"
+  }
 }
