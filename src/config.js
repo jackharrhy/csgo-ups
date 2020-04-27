@@ -7,4 +7,5 @@ module.exports = {
 	steamOtpSharedSecret: process.env.CSGOUPS_STEAM_OTP_SHARED_SECRET,
 	discordToken: process.env.CSGOUPS_DISCORD_TOKEN,
 	prefix: process.env.CSGOUPS_PREFIX,
+	databaseLocation: process.env.CSGOUPS_DATABASE_LOCATION,
 };

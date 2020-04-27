@@ -1,4 +1,5 @@
 .env
+*.db
 tmp/
 
 node_modules/

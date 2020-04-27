@@ -10,7 +10,7 @@ const langCodeBlockify = (lang, text) => codeBlockify(`${lang}\n${text}`);
 const jsonCodeBlockify = (text) => langCodeBlockify('json', text);
 
 module.exports = {
-	initBot: ({ config, logger, csgo }) => {
+	initBot: ({ config, logger = console.log, csgo }) => {
 		const commands = {
 			'ping': (msg) => {
 				msg.reply('Pong!');
@@ -20,7 +20,6 @@ module.exports = {
 				const match = await csgo.matchFromShareCode(shareCode);
 
 				const parsedMatch = parseRawMatch(match);
-				const results = processParsedMatch(parsedMatch);
 
 				const embed = new MessageEmbed()
 					.setTitle(`Match: ${parsedMatch.matchId}`)
@@ -29,8 +28,8 @@ module.exports = {
 					.setColor(0xff0000)
 					.setTimestamp(new Date(parsedMatch.matchTime * 1000));
 
-				for (const player in results) {
-					const result = results[player];
+				for (const player in parsedMatch.punishments) {
+					const result = parsedMatch.punishments[player];
 					embed.addField(
 						`${player} - ${result.pushups} push-ups`,
 						result.formattedReasons,

@@ -15,7 +15,7 @@ const steamGC = new SteamGameCoordinator(steamClient, CSGO_GAME_ID);
 const csgo = new CSGOClient(steamUser, steamGC, false);
 
 module.exports = {
-	initCsgo: ({ config, logger }) => {
+	initCsgo: ({ config, logger = console.log }) => {
 		let loggedIn = false;
 		let csgoReady = false;
 

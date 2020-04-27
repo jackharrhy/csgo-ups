@@ -1,5 +1,7 @@
 const SteamID = require('steamid');
 
+const { processParsedMatch } = require('../src/rules');
+
 const statKeys = ['kills', 'assists', 'deaths', 'scores', 'enemy_kills', 'enemy_headshots', 'mvps'];
 
 function parseRound(round) {
@@ -117,7 +119,7 @@ function parseRawMatch(rawMatch) {
 		serverIp: rawMatch.watchablematchinfo.server_ip,
 		tvPort: rawMatch.watchablematchinfo.tv_port,
 		tvSpectators: rawMatch.watchablematchinfo.tv_spectators,
-		clDecryptdataKeyPub: rawMatch.watchablematchinfo.cl_decryptdata_key_pub.toString(),
+		clDecryptDataKeyPub: rawMatch.watchablematchinfo.cl_decryptdata_key_pub.toString(),
 		roundDurations: [],
 		teams: [
 			{
@@ -156,6 +158,8 @@ function parseRawMatch(rawMatch) {
 	calculateTopBottomFraggers(match);
 
 	calculateFinalScores(match);
+
+	match.punishments = processParsedMatch(match);
 
 	return match;
 }
