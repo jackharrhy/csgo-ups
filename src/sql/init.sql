@@ -25,9 +25,7 @@ CREATE TABLE IF NOT EXISTS match (
 	server_ip INTEGER,
 	tv_port INTEGER,
 	tv_spectators INTEGER,
-	cl_decrypt_data_key_pub INTEGER,
-	team_a_final_score INTEGER,
-	team_b_final_score INTEGER
+	cl_decrypt_data_key_pub INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS round (
@@ -58,6 +56,7 @@ CREATE TABLE IF NOT EXISTS round_duration (
 CREATE TABLE IF NOT EXISTS team (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	match_id id,
+	score INTEGER,
 	FOREIGN KEY (match_id) REFERENCES match (id)
 );
 
