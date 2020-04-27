@@ -3,6 +3,7 @@ const bot = new Discord.Client();
 
 const config = require('./config');
 const { initCsgo } = require('./csgo');
+const { parseRawMatch } = require('./match');
 
 const csgo = initCsgo({
 	config,
@@ -13,13 +14,16 @@ bot.on('ready', () => {
 	console.log(`Logged into Discord as ${bot.user.tag}!`);
 });
 
+const codeBlockify = (text) => `\`\`\`${text}\`\`\``;
+
 const commands = {
 	'ping': (msg) => {
 		msg.reply('Pong!');
 	},
 	'match': async (msg, args) => {
 		const match = await csgo.matchFromShareCode(args);
-		msg.reply(`got match: ${match.matchid}`);
+		const results = parseRawMatch(match);
+		// msg.reply(codeBlockify(JSON.stringify(results.pop(), null, 2)));
 	},
 };
 
@@ -33,12 +37,13 @@ bot.on('message', async (msg) => {
 				}
 				catch (err) {
 					const { message, stack } = err;
-					console.error(stack);
+
 					try {
-						await msg.reply(`${message}\`\`\`${stack}\`\`\``);
+						await msg.reply(`${message}${codeBlockify(stack)}`);
 					}
 					catch {
-						await msg.reply(`${message}\`\`\`${stack.substring(0, 1900)}\n...\`\`\``);
+						const trimmedStack = `${stack.substring(0, 1900)}\n...`;
+						await msg.reply(`${message}${codeBlockify(trimmedStack)}`);
 					}
 				}
 			}
