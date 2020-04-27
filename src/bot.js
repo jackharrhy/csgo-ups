@@ -1,12 +1,13 @@
-const Discord = require('discord.js');
+const { Client, MessageEmbed } = require('discord.js');
 
 const { parseRawMatch } = require('./match');
 const { processParsedMatch } = require('./rules');
 
-const bot = new Discord.Client();
+const bot = new Client();
 
 const codeBlockify = (text) => `\`\`\`${text}\`\`\``;
 const langCodeBlockify = (lang, text) => codeBlockify(`${lang}\n${text}`);
+const jsonCodeBlockify = (text) => langCodeBlockify('json', text);
 
 module.exports = {
 	initBot: ({ config, logger, csgo }) => {
@@ -15,10 +16,28 @@ module.exports = {
 				msg.reply('Pong!');
 			},
 			'preview': async (msg, args) => {
-				const match = await csgo.matchFromShareCode(args);
+				const shareCode = args;
+				const match = await csgo.matchFromShareCode(shareCode);
+
 				const parsedMatch = parseRawMatch(match);
 				const results = processParsedMatch(parsedMatch);
-				msg.reply(langCodeBlockify('json', JSON.stringify(results, null, 2)));
+
+				const embed = new MessageEmbed()
+					.setTitle(`Match: ${parsedMatch.matchId}`)
+					.setDescription(`[Demo](${parsedMatch.demo})`)
+					.setFooter(`${shareCode}`)
+					.setColor(0xff0000)
+					.setTimestamp(new Date(parsedMatch.matchTime * 1000));
+
+				for (const player in results) {
+					const result = results[player];
+					embed.addField(
+						`${player} - ${result.pushups} push-ups`,
+						result.formattedReasons,
+					);
+				}
+
+				msg.channel.send(embed);
 			},
 		};
 

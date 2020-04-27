@@ -24,15 +24,13 @@ function calculatePushups(metrics) {
 	let pushups = 0;
 	const reasons = [];
 
-	console.log(metrics);
-
 	if (metrics.lostMatch) {
 		if (metrics.leadByHalftime >= 5) {
 			// Loss (w/5+ rounds up at half) - Everyone does 30 Push Ups, Bottom Frag does 60
 			if (metrics.bottomFragger) {
 				const change = 60;
 				pushups += change ;
-				reasons.push({reason: "Loss, w/5+ rounds up at half (Bottom Frag)", change});
+				reasons.push({reason: "Loss, w/5+ rounds up at half, Bottom Frag", change});
 			} else {
 				const change = 30;
 				pushups += change;
@@ -44,7 +42,7 @@ function calculatePushups(metrics) {
 			if (metrics.bottomFragger) {
 				const change = 30;
 				pushups += change ;
-				reasons.push({reason: "Loss (Bottom Frag)", change});
+				reasons.push({reason: "Loss, Bottom Frag", change});
 			} else {
 				const change = 15;
 				pushups += change;
@@ -57,7 +55,7 @@ function calculatePushups(metrics) {
 		if (metrics.bottomFragger) {
 			const change = 30;
 			pushups += change ;
-			reasons.push({reason: "Tie (Bottom Frag)", change});
+			reasons.push({reason: "Tie, Bottom Frag", change});
 		} else {
 			const change = 10;
 			pushups += change;
@@ -69,7 +67,7 @@ function calculatePushups(metrics) {
 		if (metrics.bottomFragger) {
 			const change = 20;
 			pushups += change ;
-			reasons.push({reason: "Won (Bottom Frag)", change});
+			reasons.push({reason: "Won, Bottom Frag", change});
 		}
 	}
 
@@ -79,7 +77,7 @@ function calculatePushups(metrics) {
 		if (reasons.change < 0) {
 			prefix = '-';
 		}
-		formattedReasons += `${prefix} ${reason.change} ${reason.reason}`;
+		formattedReasons += `${prefix} ${reason.change} (${reason.reason})`;
 	}
 
 	if (pushups === 0) {
