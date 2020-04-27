@@ -12,7 +12,7 @@ module.exports = {
 			'ping': (msg) => {
 				msg.reply('Pong!');
 			},
-			'match': async (msg, args) => {
+			'preview': async (msg, args) => {
 				const match = await csgo.matchFromShareCode(args);
 				const results = parseRawMatch(match);
 				delete results.teams;
