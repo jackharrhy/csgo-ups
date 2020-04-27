@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
 
 const { parseRawMatch } = require('./match');
+const { processParsedMatch } = require('./rules');
 
 const bot = new Discord.Client();
 
 const codeBlockify = (text) => `\`\`\`${text}\`\`\``;
+const langCodeBlockify = (lang, text) => codeBlockify(`${lang}\n${text}`);
 
 module.exports = {
 	initBot: ({ config, logger, csgo }) => {
@@ -14,9 +16,9 @@ module.exports = {
 			},
 			'preview': async (msg, args) => {
 				const match = await csgo.matchFromShareCode(args);
-				const results = parseRawMatch(match);
-				delete results.teams;
-				msg.reply(codeBlockify(JSON.stringify(results, null, 2)));
+				const parsedMatch = parseRawMatch(match);
+				const results = processParsedMatch(parsedMatch);
+				msg.reply(langCodeBlockify('json', JSON.stringify(results, null, 2)));
 			},
 		};
 

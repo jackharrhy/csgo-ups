@@ -100,10 +100,12 @@ function calculateFinalScores(match) {
 		match.tie = true;
 	}
 	else if (match.teams[0].finalScore > match.teams[1].finalScore) {
-		match.teams[0].win = true;
+		match.teams[0].winner = true;
+		match.teams[1].loss = true;
 	}
 	else {
-		match.teams[1].loss = true;
+		match.teams[1].winner = true;
+		match.teams[0].loss = true;
 	}
 }
 
