@@ -1,16 +1,22 @@
 CREATE TABLE IF NOT EXISTS people (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT,
+	discord_id INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS player (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	steam_id TEXT,
-	discord_id TEXT,
-	name TEXT
+	people_id INTEGER,
+	FOREIGN KEY (people_id) REFERENCES people (id)
 );
 
 CREATE TABLE IF NOT EXISTS played_in (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	player id,
-	match id,
-	team id,
-	final_results id,
+	player INTEGER,
+	match INTEGER,
+	team INTEGER,
+	final_results INTEGER,
 	FOREIGN KEY (player) REFERENCES player (id),
 	FOREIGN KEY (match) REFERENCES match (id),
 	FOREIGN KEY (team) REFERENCES team (id),
@@ -28,6 +34,22 @@ CREATE TABLE IF NOT EXISTS match (
 	cl_decrypt_data_key_pub INTEGER
 );
 
+CREATE TABLE IF NOT EXISTS team (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	match_id INTEGER,
+	score INTEGER,
+	FOREIGN KEY (match_id) REFERENCES match (id)
+);
+
+CREATE TABLE IF NOT EXISTS team_score (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	match_id INTEGER,
+	round_id INTEGER,
+	scores INTEGER,
+	FOREIGN KEY (match_id) REFERENCES match (id),
+	FOREIGN KEY (round_id) REFERENCES round (id)
+);
+
 CREATE TABLE IF NOT EXISTS round (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	number INTEGER,
@@ -37,8 +59,8 @@ CREATE TABLE IF NOT EXISTS round (
 
 CREATE TABLE IF NOT EXISTS round_score (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	round id,
-	team id,
+	round INTEGER,
+	team INTEGER,
 	score INTEGER,
 	FOREIGN KEY (round) REFERENCES round (id),
 	FOREIGN KEY (team) REFERENCES team (id)
@@ -46,39 +68,17 @@ CREATE TABLE IF NOT EXISTS round_score (
 
 CREATE TABLE IF NOT EXISTS round_duration (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	match_id id,
-	round_id id,
+	match_id INTEGER,
+	round_id INTEGER,
 	duration INTEGER,
 	FOREIGN KEY (match_id) REFERENCES match (id),
 	FOREIGN KEY (round_id) REFERENCES round (id)
 );
 
-CREATE TABLE IF NOT EXISTS team (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	match_id id,
-	score INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id)
-);
-
-CREATE TABLE IF NOT EXISTS team_score (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	match_id id,
-	round_id id,
-	scores INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id),
-	FOREIGN KEY (round_id) REFERENCES round (id)
-);
-
-CREATE TABLE IF NOT EXISTS player (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	people_id id,
-	FOREIGN KEY (people_id) REFERENCES people (id)
-);
-
 CREATE TABLE IF NOT EXISTS round_player_stats (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	player id,
-	round_id id,
+	player INTEGER,
+	round_id INTEGER,
 	kills INTEGER,
 	assists INTEGER,
 	deaths INTEGER,
