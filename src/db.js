@@ -117,28 +117,28 @@ module.exports = {
 		}
 
 		return {
-			addPerson: async ({name, discordId, steamId}) => {
-					const seenPersonBefore = await alreadySeen('people', 'discord_id', discordId);
-					if (seenPersonBefore) throw new Error('Already seen person before!');
+			addPerson: async ({ name, discordId, steamId }) => {
+				const seenPersonBefore = await alreadySeen('people', 'discord_id', discordId);
+				if (seenPersonBefore) throw new Error('Already seen person before!');
 
-					const {lastID: dbPersonId} = await objectPutter('people', {name, discordId});
+				const { lastID: dbPersonId } = await objectPutter('people', { name, discordId });
 
-					const player = await getter('player', 'steam_id', steamId);
+				const player = await getter('player', 'steam_id', steamId);
 
-					if (player === undefined) {
-						await objectPutter('player', {steamId, peopleId: dbPersonId});
-					}
-					else {
-						await objectUpdater('player', {peopleId: dbPersonId}, 'id', player.id);
-					}
+				if (player === undefined) {
+					await objectPutter('player', { steamId, peopleId: dbPersonId });
+				}
+				else {
+					await objectUpdater('player', { peopleId: dbPersonId }, 'id', player.id);
+				}
 			},
 			ingestParsedMatch: async (match) => {
 				const seenMatchBefore = await alreadySeen('match', 'match_id', parseInt(match.matchId, 10));
 				if (seenMatchBefore) throw new Error('Already seen match before!');
-				const {lastID: dbMatchId} = await objectPutter('match', match);
+				const { lastID: dbMatchId } = await objectPutter('match', match);
 
 				for (const team of match.teams) {
-					const {lastID: dbTeamId} = await objectPutter('team', {
+					const { lastID: dbTeamId } = await objectPutter('team', {
 						matchId: dbMatchId,
 						score: team.finalScore,
 					});
@@ -153,7 +153,7 @@ module.exports = {
 							dbPlayerId = player.id;
 						}
 						else {
-							dbPlayerId = (await objectPutter('player', {steamId})).lastID;
+							dbPlayerId = (await objectPutter('player', { steamId })).lastID;
 						}
 						debug('player: ', steamId, dbPlayerId, dbPersonId);
 					}
