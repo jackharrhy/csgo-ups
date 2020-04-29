@@ -13,14 +13,14 @@ CREATE TABLE IF NOT EXISTS player (
 
 CREATE TABLE IF NOT EXISTS played_in (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	player INTEGER,
-	match INTEGER,
-	team INTEGER,
-	final_results INTEGER,
-	FOREIGN KEY (player) REFERENCES player (id),
-	FOREIGN KEY (match) REFERENCES match (id),
-	FOREIGN KEY (team) REFERENCES team (id),
-	FOREIGN KEY (final_results) REFERENCES round_player_stats (id)
+	player_id INTEGER,
+	match_id INTEGER,
+	team_id INTEGER,
+	final_stats_id INTEGER,
+	FOREIGN KEY (player_id) REFERENCES player (id),
+	FOREIGN KEY (match_id) REFERENCES match (id),
+	FOREIGN KEY (team_id) REFERENCES team (id),
+	FOREIGN KEY (final_stats_id) REFERENCES round_player_stats (id)
 );
 
 CREATE TABLE IF NOT EXISTS match (
@@ -41,43 +41,26 @@ CREATE TABLE IF NOT EXISTS team (
 	FOREIGN KEY (match_id) REFERENCES match (id)
 );
 
-CREATE TABLE IF NOT EXISTS team_score (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	match_id INTEGER,
-	round_id INTEGER,
-	scores INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id),
-	FOREIGN KEY (round_id) REFERENCES round (id)
-);
-
 CREATE TABLE IF NOT EXISTS round (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	number INTEGER,
+	duration INTEGER,
 	match_id INTEGER,
 	FOREIGN KEY (match_id) REFERENCES match (id)
 );
 
 CREATE TABLE IF NOT EXISTS round_score (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	round INTEGER,
-	team INTEGER,
-	score INTEGER,
-	FOREIGN KEY (round) REFERENCES round (id),
-	FOREIGN KEY (team) REFERENCES team (id)
-);
-
-CREATE TABLE IF NOT EXISTS round_duration (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	match_id INTEGER,
 	round_id INTEGER,
-	duration INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id),
-	FOREIGN KEY (round_id) REFERENCES round (id)
+	team_id INTEGER,
+	score INTEGER,
+	FOREIGN KEY (round_id) REFERENCES round (id),
+	FOREIGN KEY (team_id) REFERENCES team (id)
 );
 
 CREATE TABLE IF NOT EXISTS round_player_stats (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	player INTEGER,
+	player_id INTEGER,
 	round_id INTEGER,
 	kills INTEGER,
 	assists INTEGER,
@@ -86,6 +69,6 @@ CREATE TABLE IF NOT EXISTS round_player_stats (
 	enemy_kills INTEGER,
 	enemy_headshots INTEGER,
 	mvps INTEGER,
-	FOREIGN KEY (player) REFERENCES player (id),
+	FOREIGN KEY (player_id) REFERENCES player (id),
 	FOREIGN KEY (round_id) REFERENCES round (id)
 );

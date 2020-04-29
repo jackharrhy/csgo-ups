@@ -155,6 +155,8 @@ function parseRawMatch(rawMatch) {
 		}
 	}
 
+	match.rounds = match.roundDurations.length;
+
 	calculateTopBottomFraggers(match);
 
 	calculateFinalScores(match);

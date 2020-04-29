@@ -20,10 +20,10 @@ const dbKeyMaps = {
 		people_id: INTEGER,
 	},
 	played_in: {
-		player: INTEGER,
-		match: INTEGER,
-		team: INTEGER,
-		final_results: INTEGER, // TODO UPDATE ONCE CREATED
+		player_id: INTEGER,
+		match_id: INTEGER,
+		team_id: INTEGER,
+		final_stats_id: INTEGER,
 	},
 	match: {
 		match_id: INTEGER,
@@ -38,6 +38,27 @@ const dbKeyMaps = {
 		match_id: TEXT,
 		score: INTEGER,
 	},
+	round: {
+		match_id: INTEGER,
+		duration: INTEGER,
+		number: INTEGER,
+	},
+	round_score: {
+		round_id: INTEGER,
+		team_id: INTEGER,
+		score: INTEGER,
+	},
+	round_player_stats: {
+		player_id: INTEGER,
+		round_id: INTEGER,
+		kills: INTEGER,
+		assists: INTEGER,
+		deaths: INTEGER,
+		scores: INTEGER,
+		enemy_kills: INTEGER,
+		enemy_headshots: INTEGER,
+		mvps: INTEGER,
+	}
 };
 
 module.exports = {
@@ -137,25 +158,61 @@ module.exports = {
 				if (seenMatchBefore) throw new Error('Already seen match before!');
 				const { lastID: dbMatchId } = await objectPutter('match', match);
 
+				const dbRoundIds = [];
+				for (let index = 0; index < match.rounds; index++) {
+					const { lastID: dbRoundId } = await objectPutter('round', {
+						matchId: dbMatchId,
+						number: index + 1,
+						duration: match.roundDurations[index],
+					});
+					dbRoundIds.push(dbRoundId);
+				}
+
 				for (const team of match.teams) {
 					const { lastID: dbTeamId } = await objectPutter('team', {
 						matchId: dbMatchId,
 						score: team.finalScore,
 					});
 
+					for (let index = 0; index < team.scores.length; index++) {
+						await objectPutter('round_score', {
+							roundId: index,
+							teamId: dbTeamId,
+							score: team.scores[index],
+						});
+					}
+
 					for (const steamId in team.players) {
 						const seenPlayerBefore = await alreadySeen('player', 'steam_id', steamId);
 
-						let dbPlayerId, dbPersonId;
+						let dbPlayerId;
 						if (seenPlayerBefore) {
 							const player = await getter('player', 'steam_id', steamId);
-							dbPersonId = player.people_id;
 							dbPlayerId = player.id;
 						}
 						else {
 							dbPlayerId = (await objectPutter('player', { steamId })).lastID;
 						}
-						debug('player: ', steamId, dbPlayerId, dbPersonId);
+
+						const playersRounds = team.players[steamId].rounds;
+
+						let dbFinalStatsId;
+						for (let index = 0; index < playersRounds.length; index++) {
+							const roundStats = playersRounds[index];
+							const { lastID: dbRoundPlayerStatsId } = await objectPutter('round_player_stats', {
+								roundId: index,
+								playerId: dbPlayerId,
+								...roundStats,
+							});
+							dbFinalStatsId = dbRoundPlayerStatsId;
+						}
+
+						await objectPutter('played_in', {
+							playerId: dbPlayerId,
+							matchId: dbMatchId,
+							teamId: dbTeamId,
+							finalStatsId: dbFinalStatsId,
+						});
 					}
 				}
 			},
