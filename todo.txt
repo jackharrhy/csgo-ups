@@ -1,0 +1,5 @@
+ways to:
+	keep track of current allotted pushups
+	allow mods to add/remove pushups manually
+	display collected data somewhere
+	pull demos and parse them for more stats, or at least store for future use
