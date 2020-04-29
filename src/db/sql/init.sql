@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS people (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT,
-	discord_id INTEGER
+	discord_id TEXT
 );
 
 CREATE TABLE IF NOT EXISTS player (
@@ -42,14 +42,14 @@ CREATE TABLE IF NOT EXISTS played_in (
 
 CREATE TABLE IF NOT EXISTS match (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	match_id INTEGER,
+	match_id TEXT,
 	share_code TEXT,
 	match_time INTEGER,
 	demo TEXT,
 	server_ip INTEGER,
 	tv_port INTEGER,
 	tv_spectators INTEGER,
-	cl_decrypt_data_key_pub INTEGER
+	cl_decrypt_data_key_pub TEXT
 );
 
 CREATE TABLE IF NOT EXISTS team (

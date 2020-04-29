@@ -3,7 +3,7 @@ const {INTEGER, TEXT} = require('./consts');
 module.exports = {
 	people: {
 		name: TEXT,
-		discord_id: INTEGER,
+		discord_id: TEXT,
 	},
 	player: {
 		steam_id: TEXT,
@@ -26,14 +26,14 @@ module.exports = {
 		final_stats_id: INTEGER,
 	},
 	match: {
-		match_id: INTEGER,
+		match_id: TEXT,
 		share_code: TEXT,
 		match_time: INTEGER,
 		demo: TEXT,
 		server_ip: INTEGER,
 		tv_port: INTEGER,
 		tv_spectators: INTEGER,
-		cl_decrypt_data_key_pub: INTEGER,
+		cl_decrypt_data_key_pub: TEXT,
 	},
 	team: {
 		match_id: TEXT,

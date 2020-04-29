@@ -8,6 +8,7 @@ const { initUtils } = require('./utils');
 
 const {initAction: initIngestParsedMatch} = require('./actions/ingestParsedMatch');
 const {initAction: initAddPeson} = require('./actions/addPerson');
+const {initAction: initGetPerson } = require('./actions/getPerson');
 
 module.exports = {
 	initDb: async ({ config, logger = console.log }) => {
@@ -25,10 +26,12 @@ module.exports = {
 		const actionArgs = {utils};
 		const ingestParsedMatch = initIngestParsedMatch(actionArgs);
 		const addPerson = initAddPeson(actionArgs);
+		const getPerson = initGetPerson(actionArgs);
 
 		return {
 			ingestParsedMatch,
 			addPerson,
+			getPerson,
 		};
 	},
 };

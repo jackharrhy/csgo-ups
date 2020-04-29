@@ -9,7 +9,7 @@ const langCodeBlockify = (lang, text) => codeBlockify(`${lang}\n${text}`);
 const jsonCodeBlockify = (text) => langCodeBlockify('json', text);
 
 module.exports = {
-	initBot: ({ config, logger = console.log, csgo }) => {
+	initBot: ({ config, logger = console.log, db, csgo }) => {
 		const commands = {
 			'ping': (msg) => {
 				msg.reply('Pong!');
@@ -19,6 +19,9 @@ module.exports = {
 				const match = await csgo.matchFromShareCode(shareCode);
 
 				const parsedMatch = parseRawMatch(shareCode, match);
+				await db.ingestParsedMatch(parsedMatch);
+
+				let content = '';
 
 				const embed = new MessageEmbed()
 					.setTitle(`Match: ${parsedMatch.matchId}`)
@@ -28,14 +31,26 @@ module.exports = {
 					.setTimestamp(new Date(parsedMatch.matchTime * 1000));
 
 				for (const player in parsedMatch.punishments) {
-					const result = parsedMatch.punishments[player];
+					const person = await db.getPerson({steamId: player})
+
+					if (person !== undefined) {
+						content += `<@${person.discord_id}>`;
+						const result = parsedMatch.punishments[player];
+						embed.addField(
+							`${person.name} - ${result.pushups} push-ups`,
+							result.formattedReasons,
+						);
+					}
+				}
+
+				if (embed.fields.length === 0) {
 					embed.addField(
-						`${player} - ${result.pushups} push-ups`,
-						result.formattedReasons,
+						'Seems like I\'m not aware of any users in this match :(',
+						'Ask the moderators of this bot to add yourself if you played in it!',
 					);
 				}
 
-				msg.channel.send(embed);
+				msg.channel.send(content, {embed});
 			},
 		};
 

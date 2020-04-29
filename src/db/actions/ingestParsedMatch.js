@@ -13,7 +13,7 @@ module.exports = {
 			debug('ingestParsedMatch', match.matchId);
 
 			await transactionify(async () => {
-				const seenMatchBefore = await alreadySeen('match', 'match_id', parseInt(match.matchId, 10));
+				const seenMatchBefore = await alreadySeen('match', 'match_id', match.matchId);
 				if (seenMatchBefore) throw new Error('Already seen match before!');
 				const { lastID: dbMatchId } = await objectPutter('match', match);
 
