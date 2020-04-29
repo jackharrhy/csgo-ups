@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS played_in (
 CREATE TABLE IF NOT EXISTS match (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	match_id INTEGER,
+	share_code TEXT,
 	match_time INTEGER,
 	demo TEXT,
 	server_ip INTEGER,

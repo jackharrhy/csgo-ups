@@ -1,7 +1,6 @@
 const { Client, MessageEmbed } = require('discord.js');
 
 const { parseRawMatch } = require('./match');
-const { processParsedMatch } = require('./rules');
 
 const bot = new Client();
 
@@ -19,7 +18,7 @@ module.exports = {
 				const shareCode = args;
 				const match = await csgo.matchFromShareCode(shareCode);
 
-				const parsedMatch = parseRawMatch(match);
+				const parsedMatch = parseRawMatch(shareCode, match);
 
 				const embed = new MessageEmbed()
 					.setTitle(`Match: ${parsedMatch.matchId}`)

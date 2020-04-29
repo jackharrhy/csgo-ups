@@ -111,8 +111,9 @@ function calculateFinalScores(match) {
 	}
 }
 
-function parseRawMatch(rawMatch) {
+function parseRawMatch(shareCode, rawMatch) {
 	let match = {
+		shareCode,
 		matchId: rawMatch.matchid.toString(),
 		matchTime: rawMatch.matchtime,
 		demo: rawMatch.roundstatsall[rawMatch.roundstatsall.length - 1].map,
