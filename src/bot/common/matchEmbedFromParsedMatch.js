@@ -14,7 +14,7 @@ module.exports = ({db}) => {
 			.setTimestamp(new Date(parsedMatch.matchTime * 1000));
 
 		for (const player in parsedMatch.punishments) {
-			const person = await db.getPerson({ steamId: player });
+			const {person} = await db.getPerson({ steamId: player });
 
 			if (person !== undefined) {
 				content += `<@${person.discord_id}>`;

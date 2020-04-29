@@ -29,6 +29,7 @@ module.exports = {
 		const getPerson = initGetPerson(actionArgs);
 
 		return {
+			instance: db,
 			ingestParsedMatch,
 			addPerson,
 			getPerson,

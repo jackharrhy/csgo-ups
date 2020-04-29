@@ -1,5 +1,6 @@
 .env
 *.db
 tmp/
+*.backup.js
 
 node_modules/

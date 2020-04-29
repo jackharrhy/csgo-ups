@@ -16,7 +16,7 @@ module.exports = {
 
 			const [mention, steamId, name] = argParts;
 
-			const person = await db.getPerson({ steamId });
+			const {person} = await db.getPerson({ steamId });
 			if (person !== undefined) return msg.reply('Already seen person before! (based on Steam ID)')
 
 			const collector = new MessageCollector(

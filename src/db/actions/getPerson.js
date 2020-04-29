@@ -10,7 +10,10 @@ module.exports = {
 			const player = await getter('player', 'steam_id', steamId);
 			if (player === undefined) return undefined;
 
-			return await getter('people', 'id', player.people_id);
+			return {
+				person: await getter('people', 'id', player.people_id),
+				player
+			};
 		};
 	},
 };
