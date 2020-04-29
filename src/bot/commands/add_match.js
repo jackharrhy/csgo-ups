@@ -1,3 +1,5 @@
+const { parseRawMatch } = require('../../match');
+
 module.exports = {
 	trigger: 'addmatch',
 	args: '<csgo sharecode>',

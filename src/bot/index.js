@@ -21,7 +21,7 @@ module.exports = {
 			commandLookup[command.trigger] = command.init({
 				db,
 				csgo,
-				common: commandLookup,
+				common: commonLookup,
 				commands,
 			});
 		}

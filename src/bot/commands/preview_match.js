@@ -1,3 +1,5 @@
+const { parseRawMatch } = require('../../match');
+
 module.exports = {
 	trigger: 'previewmatch',
 	args: '<csgo sharecode>',
@@ -10,8 +12,8 @@ module.exports = {
 			const match = await csgo.matchFromShareCode(shareCode);
 			const parsedMatch = parseRawMatch(shareCode, match);
 
-			const [content, embed] = matchEmbedFromParsedMatch(parsedMatch);
-			msg.channel.send(content, { embed });
+			const [, embed] = await matchEmbedFromParsedMatch(parsedMatch);
+			msg.channel.send('PREVIEW - none of this data will be stored in the database:', { embed });
 		};
 	},
 };

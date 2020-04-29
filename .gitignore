@@ -1,6 +1,6 @@
 .env
 *.db
 tmp/
-*.backup.js
+*.backup.json
 
 node_modules/
