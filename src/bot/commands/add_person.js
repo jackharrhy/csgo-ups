@@ -8,9 +8,6 @@ module.exports = {
 	requiresAdmin: true,
 	init: ({db, bot}) => {
 		return async(msg, args) => {
-			const ownerId = (await bot.fetchApplication()).owner.id;
-			if (msg.author.id !== ownerId) return msg.reply('Can only currently be used by bot owner!');
-
 			const userMentions = Array.from(msg.mentions.users);
 			if (userMentions.length !== 1) return msg.reply('Must mention a single user!');
 
