@@ -9,6 +9,16 @@ module.exports = {
 		steam_id: TEXT,
 		people_id: INTEGER,
 	},
+	player_punishment: {
+		player_id: INTEGER,
+		match_id: INTEGER,
+		pushups: INTEGER,
+	},
+	punishment_reason: {
+		player_punishment_id: INTEGER,
+		reason: TEXT,
+		change: TEXT,
+	},
 	played_in: {
 		player_id: INTEGER,
 		match_id: INTEGER,

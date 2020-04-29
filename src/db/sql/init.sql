@@ -11,6 +11,23 @@ CREATE TABLE IF NOT EXISTS player (
 	FOREIGN KEY (people_id) REFERENCES people (id)
 );
 
+CREATE TABLE IF NOT EXISTS player_punishment (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	player_id INTEGER,
+	match_id INTEGER,
+	pushups INTEGER,
+	FOREIGN KEY (match_id) REFERENCES match (id),
+	FOREIGN KEY (player_id) REFERENCES player (id)
+);
+
+CREATE TABLE IF NOT EXISTS punishment_reason (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	player_punishment_id INTEGER,
+	reason TEXT,
+	change TEXT,
+	FOREIGN KEY (player_punishment_id) REFERENCES player_punishment (id)
+);
+
 CREATE TABLE IF NOT EXISTS played_in (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	player_id INTEGER,
