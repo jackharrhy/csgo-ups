@@ -4,6 +4,12 @@ CREATE TABLE IF NOT EXISTS people (
 	discord_id TEXT
 );
 
+CREATE TABLE IF NOT EXISTS admin (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	people_id INTEGER,
+	FOREIGN KEY (people_id) REFERENCES people (id)
+);
+
 CREATE TABLE IF NOT EXISTS player (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	steam_id TEXT,
@@ -16,7 +22,7 @@ CREATE TABLE IF NOT EXISTS player_punishment (
 	player_id INTEGER,
 	match_id INTEGER,
 	pushups INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id),
+	FOREIGN KEY (match_id) REFERENCES "match" (id),
 	FOREIGN KEY (player_id) REFERENCES player (id)
 );
 
@@ -35,12 +41,12 @@ CREATE TABLE IF NOT EXISTS played_in (
 	team_id INTEGER,
 	final_stats_id INTEGER,
 	FOREIGN KEY (player_id) REFERENCES player (id),
-	FOREIGN KEY (match_id) REFERENCES match (id),
+	FOREIGN KEY (match_id) REFERENCES "match" (id),
 	FOREIGN KEY (team_id) REFERENCES team (id),
 	FOREIGN KEY (final_stats_id) REFERENCES round_player_stats (id)
 );
 
-CREATE TABLE IF NOT EXISTS match (
+CREATE TABLE IF NOT EXISTS "match" (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	match_id TEXT,
 	share_code TEXT,
@@ -56,15 +62,15 @@ CREATE TABLE IF NOT EXISTS team (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	match_id INTEGER,
 	score INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id)
+	FOREIGN KEY (match_id) REFERENCES "match" (id)
 );
 
-CREATE TABLE IF NOT EXISTS round (
+CREATE TABLE IF NOT EXISTS "round" (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	number INTEGER,
 	duration INTEGER,
 	match_id INTEGER,
-	FOREIGN KEY (match_id) REFERENCES match (id)
+	FOREIGN KEY (match_id) REFERENCES "match" (id)
 );
 
 CREATE TABLE IF NOT EXISTS round_score (
@@ -72,7 +78,7 @@ CREATE TABLE IF NOT EXISTS round_score (
 	round_id INTEGER,
 	team_id INTEGER,
 	score INTEGER,
-	FOREIGN KEY (round_id) REFERENCES round (id),
+	FOREIGN KEY (round_id) REFERENCES "round" (id),
 	FOREIGN KEY (team_id) REFERENCES team (id)
 );
 
@@ -88,5 +94,5 @@ CREATE TABLE IF NOT EXISTS round_player_stats (
 	enemy_headshots INTEGER,
 	mvps INTEGER,
 	FOREIGN KEY (player_id) REFERENCES player (id),
-	FOREIGN KEY (round_id) REFERENCES round (id)
+	FOREIGN KEY (round_id) REFERENCES "round" (id)
 );

@@ -5,7 +5,7 @@ module.exports = {
 	desc: 'pong',
 	requiresAdmin: false,
 	init: () => {
-		return async(msg, args) => {
+		return async (msg, args) => {
 			msg.reply('Pong!');
 		};
 	},

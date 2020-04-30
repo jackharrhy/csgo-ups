@@ -2,15 +2,17 @@ const debug = require('debug')('csgoups:db:utils')
 const decamelize = require('decamelize');
 
 const {INTEGER, TEXT} = require('./consts');
-const dbKeyMaps = require('./key_maps');
+const dbKeyMaps = require('./keyMaps');
 
 module.exports = {
 	initUtils: ({db}) => {
 		const transactionify = async (callback) => {
 			debug("Transaction start");
 			await db.exec('BEGIN TRANSACTION');
+			let result;
 			try {
-				await callback();
+				result = await callback();
+				debug("Transaction result", result);
 			} catch(err) {
 				debug("Transaction rollback");
 				await db.exec('ROLLBACK');
@@ -18,6 +20,7 @@ module.exports = {
 			}
 			debug("Transaction commit");
 			await db.exec('COMMIT');
+			return result;
 		};
 
 		const smusher = (tableName, object) => {
@@ -42,14 +45,20 @@ module.exports = {
 			return [cols, args];
 		};
 
+		const remover = async (tableName, id, value) => {
+			const query = `DELETE FROM ${tableName} WHERE ${id} = ?`;
+			debug('remover', query, id, value);
+			return await db.run(query, value);
+		};
+
 		const updater = async (tableName, cols, args, id, value) => {
 			let queryCols = cols
 				.map((col) => `${col} = ?, `)
 				.reduce((acum, col) => `${acum}${col}`)
 				.slice(0, -2);
-			args.push(id, value);
+			args.push(value);
 
-			const query = `UPDATE ${tableName} SET ${queryCols} WHERE ? = ?`;
+			const query = `UPDATE ${tableName} SET ${queryCols} WHERE ${id} = ?`;
 			debug('updater:', query, args);
 			return await db.run(query, ...args);
 		};
@@ -89,6 +98,7 @@ module.exports = {
 			transactionify,
 			smusher,
 			updater,
+			remover,
 			objectUpdater,
 			putter,
 			objectPutter,

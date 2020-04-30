@@ -26,8 +26,11 @@ module.exports = {
 			});
 		}
 
-		bot.on('ready', () => {
+		let ownerId;
+		bot.on('ready', async () => {
 			logger(`Logged into Discord as ${bot.user.tag}!`);
+
+			ownerId = (await bot.fetchApplication()).owner.id;
 		});
 
 		bot.on('message', async (msg) => {
@@ -38,8 +41,9 @@ module.exports = {
 						logger(`Invoked with: ${request}`);
 
 						if (commandsThemselves[command].requiresAdmin) {
-							const ownerId = (await bot.fetchApplication()).owner.id;
-							if (msg.author.id !== ownerId) return msg.reply('Can only currently be used by bot owner!');
+							if (msg.author.id !== ownerId || await db.isAdmin()) {
+								return msg.reply('Command can only be used by admin / bot owner!');
+							}
 						}
 
 						try {

@@ -1,7 +1,8 @@
 module.exports = [
-	require('./add_match'),
-	require('./add_person'),
+	require('./addMatch'),
+	require('./addPerson'),
 	require('./help'),
 	require('./ping'),
-	require('./preview_match.js'),
+	require('./previewMatch.js'),
+	require('./toggleAdmin.js'),
 ]

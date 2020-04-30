@@ -5,6 +5,9 @@ module.exports = {
 		name: TEXT,
 		discord_id: TEXT,
 	},
+	admin: {
+		people_id: INTEGER,
+	},
 	player: {
 		steam_id: TEXT,
 		people_id: INTEGER,

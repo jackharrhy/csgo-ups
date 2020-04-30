@@ -6,8 +6,8 @@ module.exports = {
 	name: 'Add Person',
 	desc: 'adds a person to the database',
 	requiresAdmin: true,
-	init: ({db, bot}) => {
-		return async(msg, args) => {
+	init: ({ db }) => {
+		return async (msg, args) => {
 			const userMentions = Array.from(msg.mentions.users);
 			if (userMentions.length !== 1) return msg.reply('Must mention a single user!');
 
@@ -16,7 +16,7 @@ module.exports = {
 
 			const [mention, steamId, name] = argParts;
 
-			const {person} = await db.getPerson({ steamId });
+			const { person } = await db.getPerson({ steamId });
 			if (person !== undefined) return msg.reply('Already seen person before! (based on Steam ID)')
 
 			const collector = new MessageCollector(
@@ -28,7 +28,7 @@ module.exports = {
 			collector.on('collect', async (secondMsg) => {
 				const lower = secondMsg.content.toLowerCase();
 				if (lower === 'yes') {
-					await db.addPerson({name, discordId: userMentions[0][0], steamId});
+					await db.addPerson({ name, discordId: userMentions[0][0], steamId });
 					secondMsg.reply(`Added ${name}!`);
 				} else if (lower === 'no') {
 					secondMsg.reply(`Didn\'t add ${name}!`);
