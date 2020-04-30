@@ -114,6 +114,7 @@ function calculateFinalScores(match) {
 function parseRawMatch(shareCode, rawMatch) {
 	let match = {
 		shareCode,
+		rawMatch: JSON.stringify(rawMatch),
 		matchId: rawMatch.matchid.toString(),
 		matchTime: rawMatch.matchtime,
 		demo: rawMatch.roundstatsall[rawMatch.roundstatsall.length - 1].map,

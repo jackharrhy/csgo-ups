@@ -1,14 +1,14 @@
 function calculateMetrics(match, team, otherTeam, player) {
 	const scoresHalfPoint = Math.floor(team.scores.length / 2)
 	const scoresHalfway = team.scores.slice(0, scoresHalfPoint);
-	const halfTimeScre = scoresHalfway[scoresHalfway.length - 1];
+	const halfTimeScore = scoresHalfway[scoresHalfway.length - 1];
 
 	const otherScoresHalfPoint = Math.floor(otherTeam.scores.length / 2)
 	const otherScoresHalfway = otherTeam.scores.slice(0, otherScoresHalfPoint);
 	const otherHalfTimeScore = otherScoresHalfway[otherScoresHalfway.length - 1];
 
 	const metrics = {
-		leadByHalftime: halfTimeScre - otherHalfTimeScore,
+		leadByHalftime: halfTimeScore - otherHalfTimeScore,
 		tiedMatch: match.tie,
 		wonMatch: team.winner,
 		lostMatch: team.loss,

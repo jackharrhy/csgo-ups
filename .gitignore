@@ -1,6 +1,9 @@
 .env
 *.db
 tmp/
+
 *.backup.json
+*.secret.json
+*.sh
 
 node_modules/

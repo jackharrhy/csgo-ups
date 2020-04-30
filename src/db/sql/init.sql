@@ -55,7 +55,8 @@ CREATE TABLE IF NOT EXISTS "match" (
 	server_ip INTEGER,
 	tv_port INTEGER,
 	tv_spectators INTEGER,
-	cl_decrypt_data_key_pub TEXT
+	cl_decrypt_data_key_pub TEXT,
+	raw_match TEXT
 );
 
 CREATE TABLE IF NOT EXISTS team (

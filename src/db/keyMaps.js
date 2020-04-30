@@ -37,6 +37,7 @@ module.exports = {
 		tv_port: INTEGER,
 		tv_spectators: INTEGER,
 		cl_decrypt_data_key_pub: TEXT,
+		raw_match: TEXT,
 	},
 	team: {
 		match_id: TEXT,
