@@ -8,7 +8,14 @@ const { initDb } = require('../src/db');
 		const out = {
 			players: [],
 			people: [],
+			admins: [],
 		};
+
+		const allAdmins = await db.instance.all("SELECT * FROM admin");
+
+		for (const admin of allAdmins) {
+			out.admins.push(admin);
+		}
 
 		const allPeople = await db.instance.all("SELECT * FROM people");
 

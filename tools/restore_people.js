@@ -20,6 +20,12 @@ const { initDb } = require('../src/db');
 			const query = `INSERT INTO people (id, name, discord_id) VALUES (?, ?, ?)`;
 			await db.instance.run(query, ...Object.values(person));
 		}
+
+		for (const key in data.admins) {
+			const admin = data.admins[key];
+			const query = `INSERT INTO admin (id, people_id) VALUES (?, ?)`;
+			await db.instance.run(query, ...Object.values(admin));
+		}
 	}
 	catch (err) {
 		console.error(err);

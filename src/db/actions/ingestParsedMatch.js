@@ -50,17 +50,20 @@ module.exports = ({utils}) => {
 
 						if (player.people_id) {
 							const punishment = match.punishments[steamId];
-							const dbPlayerPunishmentId = (await objectPutter(
-								'player_punishment',
-								{ playerId: dbPlayerId, pushups: punishment.pushups },
-							)).lastID;
 
-							for (const {reason, change} of punishment.reasons) {
-								await objectPutter('punishment_reason', {
-									playerPunishmentId: dbPlayerPunishmentId,
-									reason,
-									change,
-								});
+							if (punishment !== undefined) {
+								const dbPlayerPunishmentId = (await objectPutter(
+									'player_punishment',
+									{ playerId: dbPlayerId, pushups: punishment.pushups },
+								)).lastID;
+
+								for (const {reason, change} of punishment.reasons) {
+									await objectPutter('punishment_reason', {
+										playerPunishmentId: dbPlayerPunishmentId,
+										reason,
+										change,
+									});
+								}
 							}
 						}
 					}
