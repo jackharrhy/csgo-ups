@@ -1,67 +1,30 @@
-const {INTEGER, TEXT} = require('./consts');
+const {nameMap} = require('./consts');
 
-module.exports = {
-	people: {
-		name: TEXT,
-		discord_id: TEXT,
-	},
-	admin: {
-		people_id: INTEGER,
-	},
-	player: {
-		steam_id: TEXT,
-		people_id: INTEGER,
-	},
-	player_punishment: {
-		player_id: INTEGER,
-		match_id: INTEGER,
-		pushups: INTEGER,
-	},
-	punishment_reason: {
-		player_punishment_id: INTEGER,
-		reason: TEXT,
-		change: TEXT,
-	},
-	played_in: {
-		player_id: INTEGER,
-		match_id: INTEGER,
-		team_id: INTEGER,
-		final_stats_id: INTEGER,
-	},
-	match: {
-		match_id: TEXT,
-		share_code: TEXT,
-		match_time: INTEGER,
-		demo: TEXT,
-		server_ip: INTEGER,
-		tv_port: INTEGER,
-		tv_spectators: INTEGER,
-		cl_decrypt_data_key_pub: TEXT,
-		raw_match: TEXT,
-	},
-	team: {
-		match_id: TEXT,
-		score: INTEGER,
-	},
-	round: {
-		match_id: INTEGER,
-		duration: INTEGER,
-		number: INTEGER,
-	},
-	round_score: {
-		round_id: INTEGER,
-		team_id: INTEGER,
-		score: INTEGER,
-	},
-	round_player_stats: {
-		player_id: INTEGER,
-		round_id: INTEGER,
-		kills: INTEGER,
-		assists: INTEGER,
-		deaths: INTEGER,
-		scores: INTEGER,
-		enemy_kills: INTEGER,
-		enemy_headshots: INTEGER,
-		mvps: INTEGER,
+const tableListQuery = `
+SELECT
+		name
+FROM
+		sqlite_master
+WHERE
+		( type = 'table' OR type = 'view' )
+		AND name NOT LIKE 'sqlite_%'
+`;
+
+module.exports = async ({db}) => {
+	const tables = (await db.all(tableListQuery))
+		.map((obj) => obj.name);
+
+	const verboseTableData = {};
+	const keyMaps = {};
+	for (const table of tables) {
+		verboseTableData[table] = {};
+		keyMaps[table] = {};
+		const query = `PRAGMA table_info(${table})`;
+		const cols = await db.all(query);
+		for (const col of cols) {
+			verboseTableData[table][col.name] = col;
+			keyMaps[table][col.name] = nameMap[col.type];
+		}
 	}
+	return {verboseTableData, keyMaps};
 };

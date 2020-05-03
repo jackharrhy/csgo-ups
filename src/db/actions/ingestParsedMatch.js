@@ -1,6 +1,6 @@
 const debug = require('debug')('csgoups:db:action:ingestParsedMatch')
 
-module.exports = ({utils}) => {
+module.exports = ({ utils }) => {
 	const {
 		objectPutter,
 		alreadySeen,
@@ -32,6 +32,8 @@ module.exports = ({utils}) => {
 					score: team.finalScore,
 				});
 
+				const matchTimeStamp = (new Date(match.matchTime * 1000)).toISOString();
+
 				for (let index = 0; index < team.scores.length; index++) {
 					await objectPutter('round_score', {
 						roundId: index,
@@ -54,10 +56,19 @@ module.exports = ({utils}) => {
 							if (punishment !== undefined) {
 								const dbPlayerPunishmentId = (await objectPutter(
 									'player_punishment',
-									{ playerId: dbPlayerId, pushups: punishment.pushups },
+									{
+										playerId: dbPlayerId,
+										pushups: punishment.pushups,
+										timestamp: matchTimeStamp,
+									},
 								)).lastID;
 
-								for (const {reason, change} of punishment.reasons) {
+								await objectPutter(
+									'player_match_punishment',
+									{ playerPunishmentId: dbPlayerPunishmentId, matchId: dbMatchId },
+								);
+
+								for (const { reason, change } of punishment.reasons) {
 									await objectPutter('punishment_reason', {
 										playerPunishmentId: dbPlayerPunishmentId,
 										reason,

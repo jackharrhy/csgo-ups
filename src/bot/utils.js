@@ -1,5 +1,9 @@
+const codeBlockify = (text) => `\`\`\`${text}\`\`\``;
+const langCodeBlockify = (lang, text) => codeBlockify(`${lang}\n${text}`);
+const jsonCodeBlockify = (text) => langCodeBlockify('json', text);
+
 module.exports = {
-	codeBlockify: (text) => `\`\`\`${text}\`\`\``,
-	langCodeBlockify: (lang, text) => codeBlockify(`${lang}\n${text}`),
-	jsonCodeBlockify: (text) => langCodeBlockify('json', text),
+	codeBlockify,
+	langCodeBlockify,
+	jsonCodeBlockify,
 };

@@ -1,11 +1,10 @@
 const debug = require('debug')('csgoups:db:utils')
 const decamelize = require('decamelize');
 
-const {INTEGER, TEXT} = require('./consts');
-const dbKeyMaps = require('./keyMaps');
+const { INTEGER, TEXT } = require('./consts');
 
 module.exports = {
-	initUtils: ({db}) => {
+	initUtils: ({ db, dbKeyMaps }) => {
 		const transactionify = async (callback) => {
 			debug("Transaction start");
 			await db.exec('BEGIN TRANSACTION');
@@ -13,7 +12,7 @@ module.exports = {
 			try {
 				result = await callback();
 				debug("Transaction result", result);
-			} catch(err) {
+			} catch (err) {
 				debug("Transaction rollback");
 				await db.exec('ROLLBACK');
 				throw err;
@@ -94,6 +93,12 @@ module.exports = {
 			return await db.get(query, value);
 		};
 
+		const all = async (tableName) => {
+			const query = `SELECT * FROM ${tableName}`;
+			debug('all:', query);
+			return await db.all(query);
+		};
+
 		return {
 			transactionify,
 			smusher,
@@ -104,6 +109,7 @@ module.exports = {
 			objectPutter,
 			alreadySeen,
 			getter,
+			all,
 		};
 	}
 }

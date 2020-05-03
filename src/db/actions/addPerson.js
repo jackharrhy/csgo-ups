@@ -8,7 +8,7 @@ module.exports = ({ utils }) => {
 		transactionify,
 	} = utils;
 
-	return async ({ name, discordId, steamId }) => {
+	return async ({ name, discordId, steamId, guildId }) => {
 		debug('addPerson', name, discordId, steamId);
 
 		await transactionify(async () => {
@@ -16,6 +16,8 @@ module.exports = ({ utils }) => {
 			if (seenPersonBefore) throw new Error('Already seen person before!');
 
 			const { lastID: dbPersonId } = await objectPutter('people', { name, discordId });
+
+			await objectPutter('guild_association', { peopleId: dbPersonId, guildId });
 
 			const player = await getter('player', 'steam_id', steamId);
 

@@ -21,6 +21,12 @@ const { initDb } = require('../src/db');
 			await db.instance.run(query, ...Object.values(person));
 		}
 
+		for (const key in data.guildAssociations) {
+			const guildAssociation = data.guildAssociations[key];
+			const query = `INSERT INTO guild_association (id, people_id, guild_id) VALUES (?, ?, ?)`;
+			await db.instance.run(query, ...Object.values(guildAssociation));
+		}
+
 		for (const key in data.admins) {
 			const admin = data.admins[key];
 			const query = `INSERT INTO admin (id, people_id) VALUES (?, ?)`;

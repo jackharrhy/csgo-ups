@@ -28,7 +28,7 @@ module.exports = {
 			collector.on('collect', async (secondMsg) => {
 				const lower = secondMsg.content.toLowerCase();
 				if (lower === 'yes') {
-					await db.addPerson({ name, discordId: userMentions[0][0], steamId });
+					await db.addPerson({ name, discordId: userMentions[0][0], steamId, guildId: msg.guild.id });
 					secondMsg.reply(`Added ${name}!`);
 				} else if (lower === 'no') {
 					secondMsg.reply(`Didn\'t add ${name}!`);
@@ -39,7 +39,7 @@ module.exports = {
 			});
 
 			msg.reply(
-				`Adding new person:\n\`${name}\`, with Steam ID \`${steamId}\`, and Discord user ${mention}\nSay 'Yes' or 'No' to confirm/deny`
+				`Adding new person:\n\`${name}\`, with Steam ID \`${steamId}\`, and Discord user ${mention}, in the Discord guild \`${msg.guild.id}\`\nSay 'Yes' or 'No' to confirm/deny`
 			);
 		};
 	},

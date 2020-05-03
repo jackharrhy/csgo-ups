@@ -3,6 +3,8 @@ const debug = require('debug')('csgoups:db:action:isAdmin')
 module.exports = ({ utils }) => {
 	const {
 		alreadySeen,
+		transactionify,
+		getter,
 	} = utils;
 
 	return async ({ discordId }) => {
@@ -10,7 +12,7 @@ module.exports = ({ utils }) => {
 
 		return await transactionify(async () => {
 			const seenPersonBefore = await alreadySeen('people', 'discord_id', discordId);
-			if (!seenPersonBefore) throw new Error('Haven\'t seen person before!');
+			if (!seenPersonBefore) return false;
 
 			const person = await getter('people', 'discord_id', discordId);
 			return await alreadySeen('admin', 'people_id', person.id);

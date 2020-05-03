@@ -2,6 +2,9 @@
 *.db
 tmp/
 
+*.png
+*.pdf
+
 *.backup.json
 *.secret.json
 *.sh

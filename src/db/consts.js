@@ -1,4 +1,11 @@
+const INTEGER = 1;
+const TEXT = 2;
+
 module.exports = {
-	INTEGER: 1,
-	TEXT: 2,
+	nameMap: {
+		'INTEGER': INTEGER,
+		'TEXT': TEXT,
+	},
+	INTEGER,
+	TEXT,
 };

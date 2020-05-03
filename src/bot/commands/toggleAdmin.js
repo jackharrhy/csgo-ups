@@ -4,6 +4,7 @@ module.exports = {
 	name: 'Toggle Admin',
 	desc: 'toggles a person being an admin or not',
 	requiresAdmin: true,
+	ownerOnly: true,
 	init: ({ db }) => {
 		return async (msg) => {
 			const userMentions = Array.from(msg.mentions.users);

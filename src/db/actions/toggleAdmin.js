@@ -21,11 +21,7 @@ module.exports = ({ utils }) => {
 
 			if (isAdmin) {
 				debug('Removing admin');
-
-				const admin = await getter('admin', 'people_id', person.id);
-				console.log(admin);
-				const f = await remover('admin', 'people_id', person.id);
-				console.log(f);
+				await remover('admin', 'people_id', person.id);
 				return false;
 			} else {
 				debug('Adding admin');

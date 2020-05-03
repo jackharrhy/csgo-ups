@@ -9,7 +9,7 @@ module.exports = {
 	desc: 'lists commands for this bot',
 	requiresAdmin: false,
 	init: ({ commands }) => {
-		return async (msg, args) => {
+		return async (msg, args, { isAdmin, isOwner }) => {
 			const embed = new MessageEmbed()
 				.setTitle(`Help`)
 				.setColor(EMBED_COLOR);
@@ -18,10 +18,19 @@ module.exports = {
 				let prefix = '';
 
 				if (command.requiresAdmin) {
-					prefix = 'ADMIN | ';
+					if (!isAdmin) continue;
+					prefix = 'ADMIN';
 				}
 
-				embed.addField(`${prefix}${command.name} - ${command.trigger} ${command.args}`, command.desc);
+				if (command.ownerOnly) {
+					if (!isOwner) continue;
+					prefix = 'OWNER';
+				}
+
+				embed.addField(
+					`${prefix ? prefix + ' | ' : ''}${command.name} - ${command.trigger} ${command.args}`,
+					command.desc,
+				);
 			}
 
 			msg.reply(embed);
